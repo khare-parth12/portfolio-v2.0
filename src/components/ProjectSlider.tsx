@@ -15,6 +15,7 @@ import { ExternalLink, CodeXml } from "lucide-react";
 
 interface Project {
   title: string;
+  subtitle: string;
   description: string;
   techStack: string[];
   liveUrl?: string;
@@ -27,26 +28,29 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    title: "AI Resume Screener",
+    title: "HireLens AI",
+    subtitle: "AI Resume Screening SaaS Tool",
     description:
-      "A product-led growth application built to streamline candidate screening using AI-powered natural-language processing and smart ranking.",
-    techStack: ["React", "TypeScript", "Python", "Docker"],
+      "A multi-tenant AI SaaS platform utilizing a Product-Led Growth model to automate candidate screening. It leverages the Gemini API and PDF parsing for structured insights, supported by a FastAPI backend handling Razorpay HMAC webhooks, real-time user credit replenishment, and enterprise tier activations.",
+    techStack: ["React", "TypeScript", "FastAPI", "PostgreSQL", "Docker", "Gemini API"],
     liveUrl: "#",
     githubUrl: "#",
   },
   {
-    title: "Analytics Dashboard",
+    title: "Veritas AI",
+    subtitle: "Anti-Hallucination & AI Output Verification API",
     description:
-      "Real-time analytics dashboard for tracking SaaS metrics with interactive charts, cohort analysis, and export capabilities.",
-    techStack: ["Next.js", "D3.js", "PostgreSQL", "Tailwind"],
+      "A model-agnostic REST API designed to verify LLM outputs across domains. It utilizes a layered pipeline of contradiction checks and NLI-based faithfulness scoring to return structured, atomic trust-scores.",
+    techStack: ["Python", "FastAPI", "sentence-transformers", "PostgreSQL", "Redis", "Docker"],
     liveUrl: "#",
     githubUrl: "#",
   },
   {
-    title: "DevOps Pipeline Manager",
+    title: "Customer Churn Prediction System",
+    subtitle: "Real-time ML Inference & Analytics",
     description:
-      "Centralised CI/CD orchestrator that visualises build pipelines, monitors deployments, and integrates with GitHub Actions.",
-    techStack: ["Node.js", "Docker", "Redis", "React"],
+      "An end-to-end XGBoost machine learning pipeline predicting customer churn with 88% recall. Deployed as a containerized REST API with Redis caching, featuring a Streamlit analytics dashboard that utilizes SHAP waterfall explanations for stakeholder visibility.",
+    techStack: ["Python", "FastAPI", "Streamlit", "XGBoost", "Docker"],
     liveUrl: "#",
     githubUrl: "#",
   },
@@ -124,7 +128,10 @@ function ProjectCard({ project }: { project: Project }) {
             <h3 className="text-lg font-bold text-slate-900">
               {project.title}
             </h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-slate-500">
+            <p className="mt-0.5 text-xs font-semibold uppercase tracking-wide text-indigo-500">
+              {project.subtitle}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-500">
               {project.description}
             </p>
           </div>

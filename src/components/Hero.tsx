@@ -118,7 +118,7 @@ export default function Hero() {
           className="order-2 text-center md:order-1 md:text-left"
         >
           <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-indigo-500">
-            Full-Stack Developer
+            AI Engineer & Full-Stack Developer
           </p>
 
           <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
@@ -136,18 +136,22 @@ export default function Hero() {
             >
               👋
             </motion.span>
+            <span className="mt-1 block text-2xl font-bold text-indigo-600 sm:text-3xl lg:text-4xl">
+              AI Engineer & Full-Stack Developer
+            </span>
           </h1>
 
-          <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-500 md:text-lg">
-            I build performant, user-centric web applications with{" "}
-            <span className="font-medium text-slate-700">React</span>,{" "}
-            <span className="font-medium text-slate-700">TypeScript</span>, and{" "}
-            <span className="font-medium text-slate-700">Python</span>. Currently
-            focused on shipping{" "}
-            <span className="font-medium text-indigo-600">
-              B2B micro-SaaS products
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 md:text-lg">
+            I specialize in building{" "}
+            <span className="font-medium text-slate-800">
+              production-ready LLM-integrated systems
             </span>{" "}
-            that solve real problems.
+            and{" "}
+            <span className="font-medium text-indigo-600">
+              B2B micro-SaaS applications
+            </span>
+            . From deploying retrieval pipelines and secure backend architectures
+            to managing real-time frontend state sync, I own the complete stack.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4 md:justify-start">
