@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import ProjectSlider from "@/components/ProjectSlider";
+import ProjectGrid from "@/components/ProjectGrid";
 
 export default function Home() {
   return (
@@ -9,7 +9,7 @@ export default function Home() {
 
       <main className="flex-1">
         <Hero />
-        <ProjectSlider />
+        <ProjectGrid />
 
         {/* Experience placeholder section */}
         <section
