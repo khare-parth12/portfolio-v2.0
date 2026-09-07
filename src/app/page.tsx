@@ -1,41 +1,40 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import BackgroundMesh from "@/components/BackgroundMesh";
 import Hero from "@/components/Hero";
+import Skills from "@/components/Skills";
 import ProjectGrid from "@/components/ProjectGrid";
+import Contact from "@/components/Contact";
+import IntroSequence from "@/components/IntroSequence";
 
 export default function Home() {
+  const [introComplete, setIntroComplete] = useState(false);
+
+  const handleIntroComplete = useCallback(() => {
+    setIntroComplete(true);
+  }, []);
+
   return (
     <>
+      <BackgroundMesh />
       <Navbar />
 
-      <main className="flex-1">
+      <main className="h-screen scroll-smooth overflow-y-scroll snap-y snap-mandatory">
         <Hero />
+        <Skills />
         <ProjectGrid />
-
-        {/* Experience placeholder section */}
-        <section
-          id="experience"
-          className="mx-auto max-w-6xl px-6 py-28"
-        >
-          <p className="text-sm font-semibold uppercase tracking-widest text-indigo-500">
-            Career
-          </p>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-            Experience
-          </h2>
-          <p className="mt-3 max-w-2xl text-base text-slate-500">
-            This section is coming soon — add your work history, internships,
-            and education here.
-          </p>
-        </section>
+        <Contact />
       </main>
 
-      {/* Minimal footer */}
-      <footer className="border-t border-slate-200/60 bg-white/50 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 text-sm text-slate-400">
-          <span>&copy; {new Date().getFullYear()} Parth Khare</span>
-          <span>Built with Next.js &amp; ❤️</span>
-        </div>
-      </footer>
+      {/* Full-screen intro overlay — unmounts after animation */}
+      <AnimatePresence>
+        {!introComplete && (
+          <IntroSequence onComplete={handleIntroComplete} />
+        )}
+      </AnimatePresence>
     </>
   );
 }

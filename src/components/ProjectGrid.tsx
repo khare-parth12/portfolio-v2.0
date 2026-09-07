@@ -15,7 +15,6 @@ interface Project {
   techStack: string[];
   images: string[];
   liveUrl?: string;
-  gradient: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -42,7 +41,6 @@ const PROJECTS: Project[] = [
       "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
     ],
     liveUrl: "https://ai-resume-analyzer-full-stack.vercel.app/",
-    gradient: "from-indigo-200 via-blue-100 to-purple-100",
   },
   {
     title: "Veritas AI",
@@ -62,7 +60,6 @@ const PROJECTS: Project[] = [
       "linear-gradient(135deg, #0ba360 0%, #3cba92 100%)",
       "linear-gradient(135deg, #96fbc4 0%, #f9f586 100%)",
     ],
-    gradient: "from-emerald-200 via-teal-100 to-cyan-100",
   },
   {
     title: "Customer Churn Prediction System",
@@ -78,7 +75,6 @@ const PROJECTS: Project[] = [
       "/screenshots/churn/segment.png",
     ],
     liveUrl: "https://churn-frontend-1s4b.onrender.com/",
-    gradient: "from-amber-200 via-orange-100 to-yellow-100",
   },
   {
     title: "Terminal-Style Portfolio",
@@ -98,7 +94,6 @@ const PROJECTS: Project[] = [
       "linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%)",
     ],
     liveUrl: "https://portfolio-parth-khare.vercel.app/",
-    gradient: "from-pink-200 via-rose-100 to-fuchsia-100",
   },
 ];
 
@@ -126,7 +121,7 @@ function useIsMobile(breakpoint = 768) {
 
 function TechBadge({ name }: { name: string }) {
   return (
-    <span className="rounded-full bg-white/80 px-3 py-1 text-xs font-medium text-indigo-700 ring-1 ring-indigo-200/60 backdrop-blur-sm">
+    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs font-medium text-foreground/70 backdrop-blur-sm transition-all duration-200 hover:border-highlight/40 hover:text-foreground">
       {name}
     </span>
   );
@@ -177,7 +172,7 @@ function ImageCarousel({
   );
 
   return (
-    <div className="relative mt-3 overflow-hidden rounded-xl" ref={constraintsRef}>
+    <div className="relative mt-3 overflow-hidden rounded-xl border border-white/5" ref={constraintsRef}>
       {/* Carousel track */}
       <div className="relative aspect-[16/9] w-full">
         <AnimatePresence mode="popLayout" initial={false}>
@@ -201,7 +196,7 @@ function ImageCarousel({
             {isGradient(images[currentIndex]) ? (
               /* Placeholder label for gradient slides */
               <div className="flex h-full items-center justify-center">
-                <span className="rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
+                <span className="rounded-lg border border-white/10 bg-white/10 px-4 py-2 font-mono text-sm font-medium text-white/80 backdrop-blur-sm">
                   Screenshot {currentIndex + 1} / {images.length}
                 </span>
               </div>
@@ -226,7 +221,7 @@ function ImageCarousel({
                 e.stopPropagation();
                 paginate(-1);
               }}
-              className="absolute left-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white/90 backdrop-blur-sm transition-all duration-200 hover:bg-black/50 hover:scale-110"
+              className="absolute left-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white/80 backdrop-blur-sm transition-all duration-200 hover:bg-white/20 hover:scale-110"
               aria-label="Previous image"
             >
               <ChevronLeft size={16} />
@@ -237,7 +232,7 @@ function ImageCarousel({
                 e.stopPropagation();
                 paginate(1);
               }}
-              className="absolute right-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white/90 backdrop-blur-sm transition-all duration-200 hover:bg-black/50 hover:scale-110"
+              className="absolute right-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white/80 backdrop-blur-sm transition-all duration-200 hover:bg-white/20 hover:scale-110"
               aria-label="Next image"
             >
               <ChevronRight size={16} />
@@ -248,7 +243,7 @@ function ImageCarousel({
 
       {/* Dot indicators */}
       {images.length > 1 && (
-        <div className="mt-2.5 flex justify-center gap-1.5">
+        <div className="mt-2.5 flex justify-center gap-1.5 pb-2">
           {images.map((_, i) => (
             <button
               key={i}
@@ -259,8 +254,8 @@ function ImageCarousel({
               }}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 i === currentIndex
-                  ? "w-5 bg-indigo-500"
-                  : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                  ? "w-5 bg-highlight"
+                  : "w-1.5 bg-white/20 hover:bg-white/40"
               }`}
               aria-label={`Go to image ${i + 1}`}
             />
@@ -302,23 +297,19 @@ function ProjectCard({
       onMouseLeave={isMobile ? undefined : onCollapse}
       className={`
         group relative cursor-pointer select-none overflow-hidden rounded-2xl
-        border border-slate-200/80 shadow-md transition-shadow duration-300
-        hover:shadow-xl
+        border border-white/10 bg-white/5 backdrop-blur-xl
+        transition-all duration-300
+        hover:border-highlight/30 hover:bg-white/[0.08] hover:shadow-lg hover:shadow-accent/10
         ${isMobile ? "w-full" : ""}
       `}
       style={{ perspective: 800 }}
       transition={{ layout: { type: "spring", stiffness: 300, damping: 30 } }}
     >
-      {/* Gradient background */}
-      <div
-        className={`absolute inset-0 bg-gradient-to-br ${project.gradient} transition-opacity duration-500`}
-      />
-
       {/* Decorative dots */}
       <div className="absolute right-4 top-4 z-10 flex gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-300/80" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-300/80" />
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-300/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-red-400/40" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-400/40" />
+        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/40" />
       </div>
 
       {/* Content overlay */}
@@ -327,14 +318,14 @@ function ProjectCard({
         {!isExpanded && (
           isGradient(project.images[0]) ? (
             <div
-              className="mb-4 aspect-[16/9] w-full rounded-xl opacity-60"
+              className="mb-4 aspect-[16/9] w-full rounded-xl opacity-40"
               style={{ background: project.images[0] }}
             />
           ) : (
             <img
               src={project.images[0]}
               alt={project.title}
-              className="mb-4 aspect-[16/9] w-full rounded-xl object-cover opacity-80"
+              className="mb-4 aspect-[16/9] w-full rounded-xl object-cover opacity-60"
               draggable={false}
             />
           )
@@ -342,10 +333,10 @@ function ProjectCard({
 
         {/* Default state — always visible */}
         <motion.div layout="position">
-          <h3 className="text-xl font-bold text-slate-900 md:text-lg">
+          <h3 className="text-xl font-bold text-foreground md:text-lg">
             {project.title}
           </h3>
-          <p className="mt-0.5 text-xs font-semibold uppercase tracking-wide text-indigo-600">
+          <p className="mt-0.5 font-mono text-xs font-semibold uppercase tracking-wide text-highlight">
             {project.subtitle}
           </p>
         </motion.div>
@@ -363,7 +354,7 @@ function ProjectCard({
               {/* Swipeable gallery */}
               <ImageCarousel images={project.images} isMobile={isMobile} />
 
-              <p className="mt-3 text-sm leading-relaxed text-slate-700">
+              <p className="mt-3 text-sm leading-relaxed text-muted">
                 {project.description}
               </p>
 
@@ -382,7 +373,7 @@ function ProjectCard({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-95"
+                    className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-5 py-2.5 text-sm font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-highlight hover:bg-accent/30 hover:shadow-lg hover:shadow-accent/20 active:scale-95"
                   >
                     <ExternalLink size={14} />
                     Live Demo
@@ -419,7 +410,10 @@ export default function ProjectGrid() {
   }, []);
 
   return (
-    <section id="projects" className="relative py-28">
+    <section
+      id="projects"
+      className="relative h-screen w-full snap-start overflow-y-auto pt-20 pb-12"
+    >
       {/* Section heading */}
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
@@ -428,13 +422,13 @@ export default function ProjectGrid() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-sm font-semibold uppercase tracking-widest text-indigo-500">
+          <p className="font-mono text-sm font-medium uppercase tracking-widest text-accent-light">
             Portfolio
           </p>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Featured Projects
           </h2>
-          <p className="mt-3 max-w-2xl text-base text-slate-500">
+          <p className="mt-3 max-w-2xl text-base text-muted">
             A selection of things I&rsquo;ve shipped &mdash; from product-led
             growth tools to developer infrastructure.
           </p>

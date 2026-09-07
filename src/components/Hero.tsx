@@ -1,48 +1,8 @@
 "use client";
 
-import { useRef, Suspense } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
-import type { Mesh } from "three";
-
-/* ------------------------------------------------------------------ */
-/*  3-D Background — slow-rotating wireframe icosahedron              */
-/* ------------------------------------------------------------------ */
-
-function FloatingMesh() {
-  const meshRef = useRef<Mesh>(null);
-
-  useFrame((_state, delta) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.x += delta * 0.08;
-    meshRef.current.rotation.y += delta * 0.12;
-  });
-
-  return (
-    <mesh ref={meshRef} scale={2.4}>
-      <icosahedronGeometry args={[1, 1]} />
-      <meshBasicMaterial color="#c7d2fe" wireframe transparent opacity={0.35} />
-    </mesh>
-  );
-}
-
-function BackgroundCanvas() {
-  return (
-    <div className="pointer-events-none absolute inset-0 -z-10">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
-        style={{ background: "transparent" }}
-      >
-        <Suspense fallback={null}>
-          <FloatingMesh />
-        </Suspense>
-      </Canvas>
-    </div>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /*  Profile Image with 3-D tilt on hover                              */
@@ -83,13 +43,13 @@ function TiltImage() {
       }}
       className="relative mx-auto h-56 w-56 md:h-72 md:w-72"
     >
-      {/* Decorative ring */}
-      <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-indigo-400 via-purple-300 to-pink-300 opacity-60 blur-lg" />
+      {/* Decorative ring — moody twilight glow */}
+      <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-accent via-accent-light to-highlight opacity-30 blur-xl" />
 
-      {/* Image container */}
-      <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-white bg-slate-200 shadow-xl">
+      {/* Image container — glassmorphic border */}
+      <div className="relative h-full w-full overflow-hidden rounded-full border border-white/10 bg-white/5 shadow-2xl shadow-accent/20 backdrop-blur-xl">
         {/* Placeholder avatar gradient */}
-        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-indigo-100 via-slate-100 to-purple-100">
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-accent/20 via-background to-highlight/20">
           <span className="select-none text-5xl md:text-6xl">👨‍💻</span>
         </div>
       </div>
@@ -105,10 +65,8 @@ export default function Hero() {
   return (
     <section
       id="about"
-      className="relative flex min-h-screen items-center overflow-hidden pt-20"
+      className="relative flex h-screen w-full snap-start flex-col justify-center overflow-hidden pt-20"
     >
-      <BackgroundCanvas />
-
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16">
         {/* Text Column */}
         <motion.div
@@ -117,11 +75,11 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="order-2 text-center md:order-1 md:text-left"
         >
-          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-indigo-500">
+          <p className="mb-3 font-mono text-sm font-medium uppercase tracking-widest text-accent-light">
             AI Engineer & Full-Stack Developer
           </p>
 
-          <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+          <h1 className="text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             Hi, I&rsquo;m Parth{" "}
             <motion.span
               animate={{ rotate: [0, 14, -8, 14, -4, 10, 0] }}
@@ -136,18 +94,18 @@ export default function Hero() {
             >
               👋
             </motion.span>
-            <span className="mt-1 block text-2xl font-bold text-indigo-600 sm:text-3xl lg:text-4xl">
+            <span className="mt-1 block text-2xl font-semibold text-highlight sm:text-3xl lg:text-4xl">
               AI Engineer & Full-Stack Developer
             </span>
           </h1>
 
-          <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 md:text-lg">
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-muted md:text-lg">
             I specialize in building{" "}
-            <span className="font-medium text-slate-800">
+            <span className="font-medium text-foreground">
               production-ready LLM-integrated systems
             </span>{" "}
             and{" "}
-            <span className="font-medium text-indigo-600">
+            <span className="font-medium text-highlight">
               B2B micro-SaaS applications
             </span>
             . From deploying retrieval pipelines and secure backend architectures
@@ -157,16 +115,24 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap justify-center gap-4 md:justify-start">
             <a
               href="#projects"
-              className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-95"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-6 py-3 text-sm font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-highlight hover:bg-accent/30 hover:shadow-lg hover:shadow-accent/20 active:scale-95"
             >
               View Projects
               <ArrowDown size={14} strokeWidth={2.5} />
             </a>
             <a
-              href="#experience"
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:border-slate-400 hover:bg-slate-50 active:scale-95"
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-foreground/80 backdrop-blur-sm transition-all duration-300 hover:border-highlight/50 hover:bg-white/10 active:scale-95"
             >
-              Experience
+              Contact Me
             </a>
           </div>
         </motion.div>
@@ -193,7 +159,7 @@ export default function Hero() {
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ArrowDown size={20} className="text-slate-400" />
+          <ArrowDown size={20} className="text-muted/60" />
         </motion.div>
       </motion.div>
     </section>
