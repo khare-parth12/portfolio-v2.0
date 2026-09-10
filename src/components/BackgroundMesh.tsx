@@ -4,17 +4,27 @@ import { useRef, useEffect, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MathUtils } from "three";
 import type { Mesh } from "three";
+import ShaderBackground from "@/components/ShaderBackground";
 
 /* ------------------------------------------------------------------ */
 /*  Scroll-Reactive Mesh + Cinematic Camera Controller                 */
+/*  + Horizontal Drag Rotation                                         */
 /* ------------------------------------------------------------------ */
 
 /**
  * Reads scroll position from the DOM <main> container each frame.
  * Drives mesh rotation velocity and camera flight path without
  * re-renders — all state lives in refs mutated inside useFrame.
+ *
+ * Accepts an optional dragDelta ref: cumulative horizontal drag px
+ * written by the parent useDrag handler. The mesh consumes the delta
+ * each frame, converting it to smooth rotation.y via MathUtils.damp.
  */
-function MeshController() {
+function MeshController({
+  dragDelta,
+}: {
+  dragDelta?: React.RefObject<number>;
+}) {
   const meshRef = useRef<Mesh>(null);
   const { camera } = useThree();
 
@@ -24,6 +34,13 @@ function MeshController() {
     prevOffset: 0,
     dampedVelocity: 0,
     el: null as HTMLElement | null,
+  });
+
+  /** Accumulated drag rotation target (radians) */
+  const dragRotation = useRef({
+    target: 0,
+    current: 0,
+    prevApplied: 0,
   });
 
   /* Grab the snap-scroll container once the DOM is ready */
@@ -43,9 +60,11 @@ function MeshController() {
       const maxScroll = s.el.scrollHeight - s.el.clientHeight;
       const newOffset = maxScroll > 0 ? s.el.scrollTop / maxScroll : 0;
 
-      /* Raw velocity = change in offset per second */
-      const rawVelocity =
-        (newOffset - s.prevOffset) / Math.max(delta, 0.0001);
+      /* Raw velocity = change in offset per second, clamped for mobile */
+      const rawVelocity = Math.max(
+        -8,
+        Math.min(8, (newOffset - s.prevOffset) / Math.max(delta, 0.0001))
+      );
 
       s.prevOffset = newOffset;
       s.offset = newOffset;
@@ -63,16 +82,43 @@ function MeshController() {
     const vel = s.dampedVelocity;
 
     /* ------------------------------------------------------------ */
-    /*  2. Mesh rotation: atmospheric baseline + velocity spike       */
+    /*  2. Consume horizontal drag delta → smooth rotation.y         */
+    /* ------------------------------------------------------------ */
+    if (dragDelta?.current !== undefined && dragDelta.current !== 0) {
+      /* Convert px → radians: ~200px = 1 radian feels natural */
+      dragRotation.current.target += dragDelta.current * 0.005;
+      /* Reset after consuming */
+      dragDelta.current = 0;
+    }
+
+    /* Smooth damp toward the drag target (lambda 4 → snappy deceleration) */
+    dragRotation.current.current = MathUtils.damp(
+      dragRotation.current.current,
+      dragRotation.current.target,
+      4,
+      delta
+    );
+
+    /* Only apply the frame-to-frame change (not the absolute value) */
+    const dragDeltaThisFrame =
+      dragRotation.current.current - dragRotation.current.prevApplied;
+    dragRotation.current.prevApplied = dragRotation.current.current;
+
+    /* ------------------------------------------------------------ */
+    /*  3. Mesh rotation: atmospheric baseline + velocity spike       */
+    /*     + drag rotation                                            */
     /* ------------------------------------------------------------ */
     const baseSpeed = 0.08;
-    const velocityBoost = Math.min(Math.abs(vel) * 3, 5);
+    const velocityBoost = Math.min(Math.abs(vel) * 2.5, 3);
 
     mesh.rotation.x += delta * (baseSpeed + velocityBoost);
     mesh.rotation.y += delta * (baseSpeed * 1.5 + velocityBoost * 0.8);
 
+    /* Layer drag rotation delta on top of the accumulating baseline spin */
+    mesh.rotation.y += dragDeltaThisFrame;
+
     /* ------------------------------------------------------------ */
-    /*  3. Cinematic camera choreography mapped to scroll offset      */
+    /*  4. Cinematic camera choreography mapped to scroll offset      */
     /* ------------------------------------------------------------ */
     let targetX = 0;
     let targetY = 0;
@@ -112,7 +158,7 @@ function MeshController() {
   return (
     <mesh ref={meshRef} scale={2.4}>
       <icosahedronGeometry args={[1, 1]} />
-      <meshBasicMaterial color="#4A5E82" wireframe transparent opacity={0.18} />
+      <meshBasicMaterial color="#38BDF8" wireframe transparent opacity={0.18} />
     </mesh>
   );
 }
@@ -121,19 +167,30 @@ function MeshController() {
 /*  Global fixed canvas — rendered behind all content                  */
 /* ------------------------------------------------------------------ */
 
-export default function BackgroundMesh() {
+export default function BackgroundMesh({
+  dragDelta,
+}: {
+  dragDelta?: React.RefObject<number>;
+}) {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 h-screen w-full">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
-        style={{ background: "transparent" }}
-      >
-        <Suspense fallback={null}>
-          <MeshController />
-        </Suspense>
-      </Canvas>
-    </div>
+    <>
+      {/* z-[-20]: Deepest layer — fluid shader gradient */}
+      <ShaderBackground />
+
+      {/* z-[-10]: Wireframe mesh canvas — sits above the shader gradient */}
+      <div className="pointer-events-none fixed inset-0 -z-10 h-screen w-full">
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 45 }}
+          dpr={[1, 1.5]}
+          gl={{ antialias: true, alpha: true }}
+          style={{ background: "transparent" }}
+        >
+          <Suspense fallback={null}>
+            <MeshController dragDelta={dragDelta} />
+          </Suspense>
+        </Canvas>
+      </div>
+    </>
   );
 }
+

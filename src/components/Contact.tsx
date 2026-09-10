@@ -65,10 +65,10 @@ export default function Contact() {
   return (
     <footer
       id="contact"
-      className="relative flex h-screen w-full snap-start flex-col justify-center border-t border-white/5 pt-20"
+      className="relative flex h-screen w-full snap-start flex-col justify-center border-t border-white/5 pt-24"
     >
       {/* Gradient strip at top */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-highlight/30 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-col items-center text-center">
@@ -106,7 +106,7 @@ export default function Contact() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.label}
-                className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-foreground/70 backdrop-blur-xl transition-all duration-300 hover:border-highlight/50 hover:bg-white/10 hover:text-foreground hover:shadow-lg hover:shadow-accent/10 active:scale-95"
+                className="group inline-flex items-center gap-2.5 rounded-full border border-panel-border bg-panel-bg px-5 py-3 text-sm font-medium text-foreground/70 backdrop-blur-xl transition-all duration-300 hover:border-accent/50 hover:bg-panel-bg/80 hover:text-foreground hover:shadow-lg hover:shadow-accent/10 active:scale-95"
               >
                 <link.icon size={18} />
                 <span className="hidden sm:inline">{link.label}</span>

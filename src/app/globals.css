@@ -20,18 +20,22 @@
   --color-accent-light: var(--accent-light);
   --color-highlight: var(--highlight);
   --color-muted: var(--muted);
+  --color-panel-bg: var(--panel-bg);
+  --color-panel-border: var(--panel-border);
   --font-sans: var(--font-inter);
   --font-heading: var(--font-cormorant);
   --font-mono: var(--font-jetbrains);
 }
 
 :root {
-  --background: #0B0C10;
-  --foreground: #E2E2D5;
-  --accent: #4A5E82;
-  --accent-light: #6B82AE;
-  --highlight: #9C8D71;
-  --muted: #7A7A6E;
+  --background: #0B0F19;
+  --foreground: #F8FAFC;
+  --accent: #38BDF8;
+  --accent-light: #38BDF8;
+  --highlight: #38BDF8;
+  --muted: #8AA2C0;
+  --panel-bg: rgba(30, 58, 95, 0.15);
+  --panel-border: #1E3A5F;
 }
 
 html {

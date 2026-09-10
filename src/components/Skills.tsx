@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
 
 interface SkillCategory {
@@ -26,43 +27,55 @@ const SKILL_CATEGORIES: SkillCategory[] = [
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.12 },
-  },
-};
+/** Flatten all skills into a single array with category labels for color coding */
+const ALL_SKILLS = SKILL_CATEGORIES.flatMap((cat) =>
+  cat.skills.map((skill) => ({ skill, category: cat.title }))
+);
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const },
-  },
-};
+/** Map category to a subtle accent border color */
+function categoryBorder(category: string): string {
+  switch (category) {
+    case "Languages":
+      return "border-accent/40";
+    case "Frameworks & Libraries":
+      return "border-[#1E3A5F]/60";
+    case "Databases & DevOps":
+      return "border-muted/30";
+    case "Architecture & APIs":
+      return "border-accent/25";
+    default:
+      return "border-panel-border";
+  }
+}
 
-const pillVariants = {
-  hidden: { opacity: 0, scale: 0.85 },
-  visible: {
+const pillEntrance = {
+  hidden: { opacity: 0, scale: 0.7, y: 12 },
+  visible: (i: number) => ({
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.3, ease: "easeOut" as const },
-  },
+    y: 0,
+    transition: {
+      delay: i * 0.035,
+      duration: 0.4,
+      ease: "easeOut" as const,
+    },
+  }),
 };
 
 export default function Skills() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
     <section
       id="skills"
-      className="relative flex h-screen w-full snap-start flex-col justify-center overflow-hidden pt-20"
+      className="relative flex h-screen w-full snap-start flex-col justify-center pt-24"
     >
-      {/* Subtle background decoration */}
+      {/* Subtle top-rule decoration */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-0 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-highlight/20 to-transparent" />
       </div>
 
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto w-full max-w-5xl px-6">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -78,46 +91,58 @@ export default function Skills() {
             Technical Stack
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-base text-muted">
-            The languages, frameworks, and tools I use to bring ideas to life.
+            Drag the pills around — the languages, frameworks, and tools I use
+            to bring ideas to life.
           </p>
         </motion.div>
 
-        {/* Skills Grid */}
+        {/* The Glass Box */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+          ref={containerRef}
+          initial={{ opacity: 0, y: 30, scale: 0.97 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-60px" }}
-          className="mt-16 grid gap-6 sm:grid-cols-2"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative mt-12 overflow-hidden rounded-3xl border border-panel-border bg-panel-bg p-8 backdrop-blur-xl sm:p-10 md:p-12"
+          style={{ minHeight: "320px" }}
         >
-          {SKILL_CATEGORIES.map((category) => (
-            <motion.div
-              key={category.title}
-              variants={cardVariants}
-              className="group relative rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl transition-all duration-300 hover:border-highlight/40 hover:bg-white/[0.08] hover:shadow-lg hover:shadow-accent/10"
-            >
-              {/* Category Title */}
-              <h3 className="mb-4 font-mono text-sm font-bold uppercase tracking-wider text-highlight">
-                {category.title}
-              </h3>
+          {/* Inner ambient glow */}
+          <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
 
-              {/* Skill Pills */}
+          {/* Pills – flex-wrap for clean initial layout */}
+          <div className="relative flex flex-wrap items-start justify-center gap-x-3 gap-y-3">
+            {ALL_SKILLS.map(({ skill, category }, i) => (
               <motion.div
-                variants={containerVariants}
-                className="flex flex-wrap gap-2.5"
+                key={skill}
+                custom={i}
+                variants={pillEntrance}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                drag
+                dragConstraints={containerRef}
+                dragElastic={0.2}
+                dragTransition={{
+                  bounceStiffness: 400,
+                  bounceDamping: 10,
+                }}
+                whileHover={{ scale: 1.08, boxShadow: "0 0 20px rgba(156,141,113,0.25)" }}
+                whileTap={{ scale: 0.95 }}
+                whileDrag={{ scale: 1.12, zIndex: 50 }}
+                className={`
+                  inline-block cursor-grab select-none rounded-full border
+                  bg-panel-bg px-4 py-2 font-mono text-sm text-muted
+                  shadow-sm backdrop-blur-sm
+                  transition-colors duration-200
+                  active:cursor-grabbing
+                  ${categoryBorder(category)}
+                `}
               >
-                {category.skills.map((skill) => (
-                  <motion.span
-                    key={skill}
-                    variants={pillVariants}
-                    className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-sm font-medium text-foreground/80 backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:border-highlight/40 hover:bg-white/10 hover:text-foreground"
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
+                {skill}
               </motion.div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

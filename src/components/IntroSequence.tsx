@@ -62,7 +62,7 @@ function disintegrateElement(
   /* Get computed styles from the source element */
   const computed = getComputedStyle(sourceEl);
   offCtx.font = computed.font;
-  offCtx.fillStyle = "#E2E2D5"; /* Soft Ivory */
+  offCtx.fillStyle = "#F8FAFC"; /* Twilight foreground */
   offCtx.textAlign = "center";
   offCtx.textBaseline = "middle";
   offCtx.fillText(
@@ -249,7 +249,7 @@ export default function IntroSequence({
               repeat: Infinity,
               repeatType: "reverse",
             }}
-            className="ml-0.5 inline-block h-[0.85em] w-[3px] translate-y-[0.08em] bg-highlight"
+            className="ml-0.5 inline-block h-[0.85em] w-[3px] translate-y-[0.08em] bg-accent"
           />
         )}
       </span>

@@ -48,7 +48,7 @@ export default function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         scrolled
           ? "bg-background/60 backdrop-blur-xl shadow-lg shadow-black/20 border-b border-white/5"
           : "bg-transparent"
@@ -59,7 +59,7 @@ export default function Navbar() {
         <a
           href="#about"
           onClick={(e) => handleNavClick(e, "#about")}
-          className="text-sm font-semibold tracking-tight text-foreground transition-colors hover:text-highlight"
+          className="text-sm font-semibold tracking-tight text-foreground transition-colors hover:text-accent"
         >
           Parth Khare{" "}
           <span className="font-mono font-normal text-muted/60">// Developer</span>
@@ -72,7 +72,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="relative text-sm font-medium text-muted transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-highlight after:transition-all after:duration-300 hover:after:w-full"
+              className="relative text-sm font-medium text-muted transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
             >
               {link.label}
             </a>
@@ -81,7 +81,7 @@ export default function Navbar() {
             href="/Parth_Khare_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-5 py-2 text-sm font-medium text-foreground backdrop-blur-sm transition-all duration-300 hover:border-highlight hover:bg-accent/30 hover:shadow-lg hover:shadow-accent/20 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2 text-sm font-medium text-background transition-all duration-300 hover:shadow-lg hover:shadow-accent/40 active:scale-95"
           >
             <Download size={14} strokeWidth={2.5} />
             Resume
@@ -124,7 +124,7 @@ export default function Navbar() {
                 href="/Parth_Khare_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-5 py-2.5 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:border-highlight hover:bg-accent/30"
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-background transition-all hover:shadow-lg hover:shadow-accent/40"
               >
                 <Download size={14} strokeWidth={2.5} />
                 Download Resume

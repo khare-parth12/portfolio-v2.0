@@ -65,7 +65,7 @@ export default function Hero() {
   return (
     <section
       id="about"
-      className="relative flex h-screen w-full snap-start flex-col justify-center overflow-hidden pt-20"
+      className="relative flex h-screen w-full snap-start flex-col justify-center overflow-hidden pt-24"
     >
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16">
         {/* Text Column */}
@@ -94,8 +94,8 @@ export default function Hero() {
             >
               👋
             </motion.span>
-            <span className="mt-1 block text-2xl font-semibold text-highlight sm:text-3xl lg:text-4xl">
-              AI Engineer & Full-Stack Developer
+            <span className="mt-1 block text-2xl font-semibold text-accent sm:text-3xl lg:text-4xl">
+              AI Engineer & Backend Developer
             </span>
           </h1>
 
@@ -105,7 +105,7 @@ export default function Hero() {
               production-ready LLM-integrated systems
             </span>{" "}
             and{" "}
-            <span className="font-medium text-highlight">
+            <span className="font-medium text-accent">
               B2B micro-SaaS applications
             </span>
             . From deploying retrieval pipelines and secure backend architectures
@@ -119,7 +119,7 @@ export default function Hero() {
                 e.preventDefault();
                 document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-6 py-3 text-sm font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-highlight hover:bg-accent/30 hover:shadow-lg hover:shadow-accent/20 active:scale-95"
+              className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-background transition-all duration-300 hover:shadow-lg hover:shadow-accent/40 active:scale-95"
             >
               View Projects
               <ArrowDown size={14} strokeWidth={2.5} />
@@ -130,7 +130,7 @@ export default function Hero() {
                 e.preventDefault();
                 document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-foreground/80 backdrop-blur-sm transition-all duration-300 hover:border-highlight/50 hover:bg-white/10 active:scale-95"
+              className="inline-flex items-center gap-2 rounded-full border border-panel-border bg-panel-bg px-6 py-3 text-sm font-semibold text-foreground/80 backdrop-blur-sm transition-all duration-300 hover:border-accent/50 hover:bg-panel-bg/80 active:scale-95"
             >
               Contact Me
             </a>

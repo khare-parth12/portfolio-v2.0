@@ -98,7 +98,7 @@ const PROJECTS: Project[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Hook: detect mobile for tap vs hover logic                         */
+/*  Hook: detect mobile                                                */
 /* ------------------------------------------------------------------ */
 
 function useIsMobile(breakpoint = 768) {
@@ -116,25 +116,16 @@ function useIsMobile(breakpoint = 768) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Tech Badge                                                         */
+/*  Utility                                                            */
 /* ------------------------------------------------------------------ */
 
-function TechBadge({ name }: { name: string }) {
-  return (
-    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs font-medium text-foreground/70 backdrop-blur-sm transition-all duration-200 hover:border-highlight/40 hover:text-foreground">
-      {name}
-    </span>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Swipeable Image Carousel                                           */
-/* ------------------------------------------------------------------ */
-
-/** Returns true when the string is a CSS gradient rather than an image URL */
 function isGradient(src: string) {
   return src.startsWith("linear-gradient") || src.startsWith("radial-gradient");
 }
+
+/* ------------------------------------------------------------------ */
+/*  Swipeable Image Carousel (drag="x")                                */
+/* ------------------------------------------------------------------ */
 
 const SWIPE_THRESHOLD = 50;
 
@@ -146,7 +137,6 @@ function ImageCarousel({
   isMobile: boolean;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const constraintsRef = useRef<HTMLDivElement>(null);
 
   const paginate = useCallback(
     (direction: number) => {
@@ -162,23 +152,20 @@ function ImageCarousel({
 
   const handleDragEnd = useCallback(
     (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      if (info.offset.x < -SWIPE_THRESHOLD) {
-        paginate(1);
-      } else if (info.offset.x > SWIPE_THRESHOLD) {
-        paginate(-1);
-      }
+      if (info.offset.x < -SWIPE_THRESHOLD) paginate(1);
+      else if (info.offset.x > SWIPE_THRESHOLD) paginate(-1);
     },
     [paginate]
   );
 
   return (
-    <div className="relative mt-3 overflow-hidden rounded-xl border border-white/5" ref={constraintsRef}>
-      {/* Carousel track */}
+    <div className="relative overflow-hidden rounded-xl border border-panel-border">
+      {/* Track */}
       <div className="relative aspect-[16/9] w-full">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
             key={currentIndex}
-            className="absolute inset-0 cursor-grab rounded-xl active:cursor-grabbing overflow-hidden"
+            className="absolute inset-0 cursor-grab overflow-hidden rounded-xl active:cursor-grabbing"
             style={
               isGradient(images[currentIndex])
                 ? { background: images[currentIndex] }
@@ -194,25 +181,23 @@ function ImageCarousel({
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             {isGradient(images[currentIndex]) ? (
-              /* Placeholder label for gradient slides */
               <div className="flex h-full items-center justify-center">
-                <span className="rounded-lg border border-white/10 bg-white/10 px-4 py-2 font-mono text-sm font-medium text-white/80 backdrop-blur-sm">
+                <span className="rounded-lg border border-panel-border bg-panel-bg px-4 py-2 font-mono text-sm font-medium text-muted backdrop-blur-sm">
                   Screenshot {currentIndex + 1} / {images.length}
                 </span>
               </div>
             ) : (
-              /* Real screenshot */
               <img
                 src={images[currentIndex]}
                 alt={`Screenshot ${currentIndex + 1} of ${images.length}`}
-                className="h-full w-full object-cover pointer-events-none select-none"
+                className="pointer-events-none h-full w-full select-none object-cover"
                 draggable={false}
               />
             )}
           </motion.div>
         </AnimatePresence>
 
-        {/* Desktop chevron overlays */}
+        {/* Desktop chevrons */}
         {!isMobile && images.length > 1 && (
           <>
             <button
@@ -221,7 +206,7 @@ function ImageCarousel({
                 e.stopPropagation();
                 paginate(-1);
               }}
-              className="absolute left-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white/80 backdrop-blur-sm transition-all duration-200 hover:bg-white/20 hover:scale-110"
+              className="absolute left-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-panel-border bg-panel-bg text-muted backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-panel-bg/80"
               aria-label="Previous image"
             >
               <ChevronLeft size={16} />
@@ -232,7 +217,7 @@ function ImageCarousel({
                 e.stopPropagation();
                 paginate(1);
               }}
-              className="absolute right-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white/80 backdrop-blur-sm transition-all duration-200 hover:bg-white/20 hover:scale-110"
+              className="absolute right-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-panel-border bg-panel-bg text-muted backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-panel-bg/80"
               aria-label="Next image"
             >
               <ChevronRight size={16} />
@@ -241,7 +226,7 @@ function ImageCarousel({
         )}
       </div>
 
-      {/* Dot indicators */}
+      {/* Dots */}
       {images.length > 1 && (
         <div className="mt-2.5 flex justify-center gap-1.5 pb-2">
           {images.map((_, i) => (
@@ -254,8 +239,8 @@ function ImageCarousel({
               }}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 i === currentIndex
-                  ? "w-5 bg-highlight"
-                  : "w-1.5 bg-white/20 hover:bg-white/40"
+                  ? "w-5 bg-accent"
+                  : "w-1.5 bg-panel-border hover:bg-muted/40"
               }`}
               aria-label={`Go to image ${i + 1}`}
             />
@@ -267,155 +252,161 @@ function ImageCarousel({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Project Card — bento-style with expand/collapse                    */
+/*  Dossier Panel — collapsed bar / expanded split-pane                */
 /* ------------------------------------------------------------------ */
 
-function ProjectCard({
+function DossierPanel({
   project,
+  index,
   isExpanded,
-  onExpand,
-  onCollapse,
+  onToggle,
   isMobile,
 }: {
   project: Project;
+  index: number;
   isExpanded: boolean;
-  onExpand: () => void;
-  onCollapse: () => void;
+  onToggle: () => void;
   isMobile: boolean;
 }) {
-  const handleClick = useCallback(() => {
-    if (!isMobile) return;
-    if (isExpanded) onCollapse();
-    else onExpand();
-  }, [isMobile, isExpanded, onExpand, onCollapse]);
-
   return (
     <motion.div
       layout
-      onClick={handleClick}
-      onMouseEnter={isMobile ? undefined : onExpand}
-      onMouseLeave={isMobile ? undefined : onCollapse}
+      onClick={onToggle}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{
+        layout: { type: "spring", stiffness: 280, damping: 28 },
+        opacity: { duration: 0.45, delay: index * 0.08 },
+        y: { duration: 0.45, delay: index * 0.08 },
+      }}
       className={`
         group relative cursor-pointer select-none overflow-hidden rounded-2xl
-        border border-white/10 bg-white/5 backdrop-blur-xl
-        transition-all duration-300
-        hover:border-highlight/30 hover:bg-white/[0.08] hover:shadow-lg hover:shadow-accent/10
-        ${isMobile ? "w-full" : ""}
+        border border-panel-border bg-panel-bg backdrop-blur-xl
+        transition-colors duration-300
+        hover:border-accent/30 hover:bg-panel-bg
+        ${isExpanded ? "mb-6" : "mb-4"}
       `}
-      style={{ perspective: 800 }}
-      transition={{ layout: { type: "spring", stiffness: 300, damping: 30 } }}
     >
-      {/* Decorative dots */}
-      <div className="absolute right-4 top-4 z-10 flex gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-400/40" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-400/40" />
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/40" />
-      </div>
+      {/* ---- Collapsed bar (always visible) ---- */}
+      <motion.div layout="position" className="relative z-10 px-6 py-5 sm:px-8">
+        <div className="flex items-baseline justify-between gap-4">
+          <div className="min-w-0">
+            <h3 className="font-serif text-xl font-bold text-foreground sm:text-2xl">
+              {project.title}
+            </h3>
+            <p className="mt-0.5 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+              {project.subtitle}
+            </p>
+          </div>
 
-      {/* Content overlay */}
-      <div className="relative z-10 flex h-full flex-col justify-end p-6">
-        {/* Cover image placeholder (collapsed state) */}
-        {!isExpanded && (
-          isGradient(project.images[0]) ? (
-            <div
-              className="mb-4 aspect-[16/9] w-full rounded-xl opacity-40"
-              style={{ background: project.images[0] }}
-            />
-          ) : (
-            <img
-              src={project.images[0]}
-              alt={project.title}
-              className="mb-4 aspect-[16/9] w-full rounded-xl object-cover opacity-60"
-              draggable={false}
-            />
-          )
-        )}
+          {/* Expand / collapse indicator */}
+          <motion.span
+            animate={{ rotate: isExpanded ? 45 : 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex-shrink-0 text-lg text-muted"
+          >
+            +
+          </motion.span>
+        </div>
+      </motion.div>
 
-        {/* Default state — always visible */}
-        <motion.div layout="position">
-          <h3 className="text-xl font-bold text-foreground md:text-lg">
-            {project.title}
-          </h3>
-          <p className="mt-0.5 font-mono text-xs font-semibold uppercase tracking-wide text-highlight">
-            {project.subtitle}
-          </p>
-        </motion.div>
+      {/* ---- Expanded dossier ---- */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            {/* Divider */}
+            <div className="mx-6 h-px bg-panel-border sm:mx-8" />
 
-        {/* Expanded state — carousel, description, tech, button */}
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="overflow-hidden"
-            >
-              {/* Swipeable gallery */}
-              <ImageCarousel images={project.images} isMobile={isMobile} />
-
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {project.description}
-              </p>
-
-              {/* Tech badges */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {project.techStack.map((tech) => (
-                  <TechBadge key={tech} name={tech} />
-                ))}
+            {/* Split-pane container */}
+            <div className="grid grid-cols-1 gap-6 p-6 sm:p-8 md:grid-cols-2">
+              {/* Left pane — visuals */}
+              <div
+                data-dossier-gallery
+                onClick={(e) => e.stopPropagation()}
+                className="cursor-default"
+              >
+                <p className="mb-3 font-mono text-[10px] font-bold uppercase tracking-widest text-muted">
+                  Gallery
+                </p>
+                <ImageCarousel images={project.images} isMobile={isMobile} />
               </div>
 
-              {/* Live Demo button */}
-              {project.liveUrl && (
-                <div className="mt-5">
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-5 py-2.5 text-sm font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-highlight hover:bg-accent/30 hover:shadow-lg hover:shadow-accent/20 active:scale-95"
-                  >
-                    <ExternalLink size={14} />
-                    Live Demo
-                  </a>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              {/* Right pane — technical document */}
+              <div>
+                <p className="mb-3 font-mono text-[10px] font-bold uppercase tracking-widest text-muted">
+                  Dossier
+                </p>
 
-      {/* Collapsed spacer — keeps a minimum card height when not expanded */}
-      {!isExpanded && (
-        <div className={`${isMobile ? "pt-4" : "pt-6"}`} />
-      )}
+                <p className="text-sm leading-relaxed text-muted">
+                  {project.description}
+                </p>
+
+                {/* Tech stack pills */}
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {project.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-full border border-panel-border bg-panel-bg px-3 py-1 font-mono text-xs font-medium text-muted backdrop-blur-sm transition-colors duration-200 hover:bg-panel-bg/80 hover:text-foreground"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Live Demo button */}
+                {project.liveUrl && (
+                  <div className="mt-6">
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-background transition-all duration-300 hover:shadow-lg hover:shadow-accent/40 active:scale-95"
+                    >
+                      <ExternalLink size={14} />
+                      Live Demo
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Project Grid Section                                               */
+/*  Project Grid Section (Cinematic Dossier)                           */
 /* ------------------------------------------------------------------ */
 
 export default function ProjectGrid() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const isMobile = useIsMobile();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const handleExpand = useCallback((index: number) => {
-    setExpandedIndex(index);
-  }, []);
-
-  const handleCollapse = useCallback(() => {
-    setExpandedIndex(null);
-  }, []);
+  const handleToggle = useCallback(
+    (index: number) => {
+      setExpandedIndex((prev) => (prev === index ? null : index));
+    },
+    []
+  );
 
   return (
     <section
       id="projects"
-      className="relative h-screen w-full snap-start overflow-y-auto pt-20 pb-12"
+      className="relative flex h-screen w-full snap-start flex-col pt-24"
     >
       {/* Section heading */}
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto w-full max-w-5xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -435,25 +426,21 @@ export default function ProjectGrid() {
         </motion.div>
       </div>
 
-      {/* Bento Grid */}
-      <div className="mx-auto mt-12 max-w-6xl px-6">
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+      {/* Scrollable dossier list */}
+      <div
+        ref={scrollRef}
+        className="mt-10 flex-1 overflow-y-auto pb-12"
+      >
+        <div className="mx-auto max-w-5xl px-6">
           {PROJECTS.map((project, i) => (
-            <motion.div
+            <DossierPanel
               key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.45, delay: i * 0.1 }}
-            >
-              <ProjectCard
-                project={project}
-                isExpanded={expandedIndex === i}
-                onExpand={() => handleExpand(i)}
-                onCollapse={handleCollapse}
-                isMobile={isMobile}
-              />
-            </motion.div>
+              project={project}
+              index={i}
+              isExpanded={expandedIndex === i}
+              onToggle={() => handleToggle(i)}
+              isMobile={isMobile}
+            />
           ))}
         </div>
       </div>
