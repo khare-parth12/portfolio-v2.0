@@ -2,65 +2,92 @@
 
 import { useRef } from "react";
 import { motion } from "framer-motion";
+import type { IconType } from "react-icons";
+import {
+  SiPython,
+  SiTypescript,
+  SiJavascript,
+  SiReact,
+  SiNextdotjs,
+  SiFastapi,
+  SiFlask,
+  SiStreamlit,
+  SiScikitlearn,
+  SiPostgresql,
+  SiRedis,
+  SiMongodb,
+  SiDocker,
+  SiGit,
+  SiJsonwebtokens,
+  SiHtml5,
+} from "react-icons/si";
+import { FaAws } from "react-icons/fa6";
+import { Globe, Webhook } from "lucide-react";
 
-interface SkillCategory {
-  title: string;
-  skills: string[];
+/* ------------------------------------------------------------------ */
+/*  Skill data — each entry maps to an official logo                   */
+/* ------------------------------------------------------------------ */
+
+interface SkillEntry {
+  name: string;
+  /** react-icons IconType OR a lucide-react component */
+  icon: IconType | React.FC<React.SVGProps<SVGSVGElement> & { size?: number }>;
+  /** Brand colour for the icon */
+  color: string;
+  category: string;
 }
 
-const SKILL_CATEGORIES: SkillCategory[] = [
-  {
-    title: "Languages",
-    skills: ["Python", "TypeScript", "JavaScript", "SQL", "HTML/CSS"],
-  },
-  {
-    title: "Frameworks & Libraries",
-    skills: ["React", "Next.js", "FastAPI", "Flask", "Streamlit", "Scikit-learn"],
-  },
-  {
-    title: "Databases & DevOps",
-    skills: ["PostgreSQL", "Redis", "MongoDB", "Docker", "AWS", "Git"],
-  },
-  {
-    title: "Architecture & APIs",
-    skills: ["REST APIs", "JWT/RBAC", "Razorpay Webhooks (HMAC)"],
-  },
+const SKILLS: SkillEntry[] = [
+  // Languages
+  { name: "Python", icon: SiPython, color: "#3776AB", category: "Languages" },
+  { name: "TypeScript", icon: SiTypescript, color: "#3178C6", category: "Languages" },
+  { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E", category: "Languages" },
+  { name: "SQL", icon: SiPostgresql, color: "#4169E1", category: "Languages" },
+  { name: "HTML/CSS", icon: SiHtml5, color: "#E34F26", category: "Languages" },
+
+  // Frameworks & Libraries
+  { name: "React", icon: SiReact, color: "#61DAFB", category: "Frameworks" },
+  { name: "Next.js", icon: SiNextdotjs, color: "#F8FAFC", category: "Frameworks" },
+  { name: "FastAPI", icon: SiFastapi, color: "#009688", category: "Frameworks" },
+  { name: "Flask", icon: SiFlask, color: "#F8FAFC", category: "Frameworks" },
+  { name: "Streamlit", icon: SiStreamlit, color: "#FF4B4B", category: "Frameworks" },
+  { name: "Scikit-learn", icon: SiScikitlearn, color: "#F7931E", category: "Frameworks" },
+
+  // Databases & DevOps
+  { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1", category: "DevOps" },
+  { name: "Redis", icon: SiRedis, color: "#DC382D", category: "DevOps" },
+  { name: "MongoDB", icon: SiMongodb, color: "#47A248", category: "DevOps" },
+  { name: "Docker", icon: SiDocker, color: "#2496ED", category: "DevOps" },
+  { name: "AWS", icon: FaAws, color: "#FF9900", category: "DevOps" },
+  { name: "Git", icon: SiGit, color: "#F05032", category: "DevOps" },
+
+  // Architecture & APIs
+  { name: "REST APIs", icon: Globe as unknown as IconType, color: "#38BDF8", category: "Architecture" },
+  { name: "JWT/RBAC", icon: SiJsonwebtokens, color: "#F8FAFC", category: "Architecture" },
+  { name: "Webhooks", icon: Webhook as unknown as IconType, color: "#A78BFA", category: "Architecture" },
 ];
 
-/** Flatten all skills into a single array with category labels for color coding */
-const ALL_SKILLS = SKILL_CATEGORIES.flatMap((cat) =>
-  cat.skills.map((skill) => ({ skill, category: cat.title }))
-);
+/* ------------------------------------------------------------------ */
+/*  Animation variants                                                 */
+/* ------------------------------------------------------------------ */
 
-/** Map category to a subtle accent border color */
-function categoryBorder(category: string): string {
-  switch (category) {
-    case "Languages":
-      return "border-accent/40";
-    case "Frameworks & Libraries":
-      return "border-[#1E3A5F]/60";
-    case "Databases & DevOps":
-      return "border-muted/30";
-    case "Architecture & APIs":
-      return "border-accent/25";
-    default:
-      return "border-panel-border";
-  }
-}
-
-const pillEntrance = {
-  hidden: { opacity: 0, scale: 0.7, y: 12 },
+const coinEntrance = {
+  hidden: { opacity: 0, scale: 0.6, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     scale: 1,
     y: 0,
     transition: {
-      delay: i * 0.035,
-      duration: 0.4,
+      delay: i * 0.04,
+      duration: 0.45,
       ease: "easeOut" as const,
     },
   }),
 };
+
+/* ------------------------------------------------------------------ */
+/*  Skills Component                                                   */
+/* ------------------------------------------------------------------ */
 
 export default function Skills() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -91,7 +118,7 @@ export default function Skills() {
             Technical Stack
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-base text-muted">
-            Drag the pills around — the languages, frameworks, and tools I use
+            Drag the coins around — the languages, frameworks, and tools I use
             to bring ideas to life.
           </p>
         </motion.div>
@@ -104,19 +131,19 @@ export default function Skills() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="relative mt-12 overflow-hidden rounded-3xl border border-panel-border bg-panel-bg p-8 backdrop-blur-xl sm:p-10 md:p-12"
-          style={{ minHeight: "320px" }}
+          style={{ minHeight: "360px" }}
         >
           {/* Inner ambient glow */}
           <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
 
-          {/* Pills – flex-wrap for clean initial layout */}
-          <div className="relative flex flex-wrap items-start justify-center gap-x-3 gap-y-3">
-            {ALL_SKILLS.map(({ skill, category }, i) => (
+          {/* Skill Coins — flex-wrap for clean initial layout */}
+          <div className="relative flex flex-wrap items-start justify-center">
+            {SKILLS.map(({ name, icon: Icon, color }, i) => (
               <motion.div
-                key={skill}
+                key={name}
                 custom={i}
-                variants={pillEntrance}
+                variants={coinEntrance}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
@@ -125,21 +152,24 @@ export default function Skills() {
                 dragElastic={0.2}
                 dragTransition={{
                   bounceStiffness: 400,
-                  bounceDamping: 10,
+                  bounceDamping: 15,
                 }}
-                whileHover={{ scale: 1.08, boxShadow: "0 0 20px rgba(156,141,113,0.25)" }}
-                whileTap={{ scale: 0.95 }}
-                whileDrag={{ scale: 1.12, zIndex: 50 }}
-                className={`
-                  inline-block cursor-grab select-none rounded-full border
-                  bg-panel-bg px-4 py-2 font-mono text-sm text-muted
-                  shadow-sm backdrop-blur-sm
-                  transition-colors duration-200
-                  active:cursor-grabbing
-                  ${categoryBorder(category)}
-                `}
+                whileHover={{
+                  scale: 1.1,
+                  boxShadow: `0 0 24px ${color}30`,
+                }}
+                whileTap={{ scale: 0.92 }}
+                whileDrag={{ scale: 1.15, zIndex: 50 }}
+                className="m-2 inline-flex h-24 w-24 cursor-grab flex-col items-center justify-center gap-2
+                           rounded-full border border-panel-border bg-background/50
+                           shadow-lg backdrop-blur-md
+                           transition-colors duration-200
+                           active:cursor-grabbing"
               >
-                {skill}
+                <Icon size={32} color={color} className="w-8 h-8 shrink-0" />
+                <span className="text-xs font-mono text-muted text-center leading-tight px-1">
+                  {name}
+                </span>
               </motion.div>
             ))}
           </div>
