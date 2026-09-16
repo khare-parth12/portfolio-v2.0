@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -78,6 +78,24 @@ function useGlareGradient(
 }
 
 /* ------------------------------------------------------------------ */
+/*  SSR-safe hover detection                                            */
+/* ------------------------------------------------------------------ */
+
+function useCanHover() {
+  const [canHover, setCanHover] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(hover: hover)");
+    setCanHover(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setCanHover(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  return canHover;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Holographic Plaque card                                             */
 /* ------------------------------------------------------------------ */
 
@@ -86,9 +104,11 @@ const springConfig = { stiffness: 260, damping: 22 };
 function HoloPlaque({
   cert,
   index,
+  canHover,
 }: {
   cert: Certificate;
   index: number;
+  canHover: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -126,8 +146,8 @@ function HoloPlaque({
   return (
     <motion.div
       ref={ref}
-      onMouseMove={handleMouse}
-      onMouseLeave={handleLeave}
+      onMouseMove={canHover ? handleMouse : undefined}
+      onMouseLeave={canHover ? handleLeave : undefined}
       initial={{ opacity: 0, x: 40 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.3 }}
@@ -138,7 +158,7 @@ function HoloPlaque({
         transformStyle: "preserve-3d",
         perspective: 800,
       }}
-      className="w-[85vw] flex-shrink-0 snap-center md:w-[600px]"
+      className="w-[88vw] flex-shrink-0 snap-center md:w-[440px] lg:w-[600px]"
     >
       <div className="group relative cursor-pointer overflow-hidden rounded-2xl border border-panel-border bg-panel-bg p-2 backdrop-blur-xl transition-colors duration-300 hover:border-accent/30">
         {/* Certificate image */}
@@ -147,7 +167,7 @@ function HoloPlaque({
             src={cert.image}
             alt={cert.title}
             fill
-            sizes="(max-width: 768px) 85vw, 600px"
+            sizes="(max-width: 768px) 88vw, (max-width: 1024px) 440px, 600px"
             className="object-contain"
           />
 
@@ -172,6 +192,8 @@ function HoloPlaque({
 /* ------------------------------------------------------------------ */
 
 export default function Certificates() {
+  const canHover = useCanHover();
+
   return (
     <section
       id="certificates"
@@ -206,10 +228,10 @@ export default function Certificates() {
         {/* Horizontal carousel track */}
         <div
           data-dossier-gallery="true"
-          className="mt-10 flex gap-8 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar"
+          className="mt-10 flex gap-8 overflow-x-auto pb-8 snap-x snap-mandatory styled-scrollbar-horizontal"
         >
           {CERTIFICATES.map((cert, i) => (
-            <HoloPlaque key={cert.title} cert={cert} index={i} />
+            <HoloPlaque key={cert.title} cert={cert} index={i} canHover={canHover} />
           ))}
         </div>
       </div>

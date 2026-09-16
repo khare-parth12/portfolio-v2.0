@@ -46,7 +46,7 @@ function GitHubIcon({ size = 18 }: { size?: number }) {
 const SOCIAL_LINKS = [
   {
     label: "Email",
-    href: "mailto:khareparth12@gmail.com",
+    href: "mailto:khare.parth2112@gmail.com",
     icon: Mail,
   },
   {
@@ -70,7 +70,7 @@ export default function Contact() {
       {/* Gradient strip at top */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-12">
         <div className="flex flex-col items-center text-center">
           {/* CTA */}
           <motion.div
@@ -117,8 +117,8 @@ export default function Contact() {
 
         {/* Bottom bar */}
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 text-sm text-muted/60 sm:flex-row">
-          <span>&copy; {new Date().getFullYear()} Parth Khare</span>
-          <span>Built with Next.js &amp; ❤️</span>
+          <span className="text-center">&copy; {new Date().getFullYear()} Parth Khare</span>
+          {/* <span>Built with Next.js &amp; ❤️</span> */}
         </div>
       </div>
     </footer>

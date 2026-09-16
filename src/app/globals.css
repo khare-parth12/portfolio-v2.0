@@ -76,3 +76,36 @@ h1, h2, h3 {
   background: var(--accent);
   color: var(--foreground);
 }
+
+/* Styled horizontal scrollbar — Twilight & Glass themed */
+.styled-scrollbar-horizontal {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--panel-border) transparent;
+}
+
+.styled-scrollbar-horizontal::-webkit-scrollbar {
+  height: 6px;
+}
+
+@media (min-width: 768px) {
+  .styled-scrollbar-horizontal::-webkit-scrollbar {
+    height: 8px;
+  }
+}
+
+.styled-scrollbar-horizontal::-webkit-scrollbar-track {
+  background: rgba(30, 58, 95, 0.3);
+  border-radius: 9999px;
+  margin-top: 1rem;
+}
+
+.styled-scrollbar-horizontal::-webkit-scrollbar-thumb {
+  background: var(--panel-border);
+  border-radius: 9999px;
+  transition: background 0.2s;
+}
+
+.styled-scrollbar-horizontal::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.6);
+}

@@ -22,32 +22,40 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Parth Khare — Full-Stack Developer & Builder",
+  metadataBase: new URL("https://parthkhare.dev"),
+  title: "Parth Khare — AI Engineer & Full-Stack Developer",
   description:
-    "Portfolio of Parth Khare — a full-stack developer specialising in React, TypeScript, and building B2B micro-SaaS products.",
+    "Portfolio of Parth Khare — an AI Engineer & Full-Stack Developer specialising in production-ready LLM-integrated systems, B2B micro-SaaS applications, and modern web experiences.",
   keywords: [
     "Parth Khare",
+    "AI Engineer",
     "Full-Stack Developer",
+    "LLM",
     "React",
     "TypeScript",
     "Python",
     "Next.js",
+    "FastAPI",
     "B2B SaaS",
     "Portfolio",
   ],
   authors: [{ name: "Parth Khare" }],
+  icons: {
+    icon: "/favicon.ico",
+  },
   openGraph: {
-    title: "Parth Khare — Full-Stack Developer & Builder",
+    title: "Parth Khare — AI Engineer & Full-Stack Developer",
     description:
-      "Full-stack developer specialising in React, TypeScript, and building B2B micro-SaaS products.",
+      "AI Engineer & Full-Stack Developer specialising in production-ready LLM-integrated systems and B2B micro-SaaS applications.",
     type: "website",
     locale: "en_US",
+    url: "https://parthkhare.dev",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Parth Khare — Full-Stack Developer & Builder",
+    title: "Parth Khare — AI Engineer & Full-Stack Developer",
     description:
-      "Full-stack developer specialising in React, TypeScript, and building B2B micro-SaaS products.",
+      "AI Engineer & Full-Stack Developer specialising in production-ready LLM-integrated systems and B2B micro-SaaS applications.",
   },
 };
 
@@ -55,15 +63,17 @@ const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Parth Khare",
-  jobTitle: "Full-Stack Developer",
+  jobTitle: "AI Engineer & Full-Stack Developer",
   description:
-    "Full-stack developer specialising in React, TypeScript, Python, and building B2B micro-SaaS products.",
+    "AI Engineer & Full-Stack Developer specialising in production-ready LLM-integrated systems, Python, TypeScript, and B2B micro-SaaS applications.",
   knowsAbout: [
+    "Artificial Intelligence",
+    "LLM Integration",
     "React",
     "TypeScript",
     "Python",
     "Next.js",
-    "Node.js",
+    "FastAPI",
     "Docker",
     "Full-Stack Development",
     "B2B SaaS",

@@ -1,15 +1,33 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
+/*  SSR-safe hover detection                                            */
+/* ------------------------------------------------------------------ */
+
+function useCanHover() {
+  const [canHover, setCanHover] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(hover: hover)");
+    setCanHover(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setCanHover(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  return canHover;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Profile Image with 3-D tilt on hover                              */
 /* ------------------------------------------------------------------ */
 
-function TiltImage() {
+function TiltImage({ canHover }: { canHover: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
@@ -34,15 +52,15 @@ function TiltImage() {
   return (
     <motion.div
       ref={ref}
-      onMouseMove={handleMouse}
-      onMouseLeave={handleLeave}
+      onMouseMove={canHover ? handleMouse : undefined}
+      onMouseLeave={canHover ? handleLeave : undefined}
       style={{
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
         perspective: 600,
       }}
-      className="relative mx-auto h-56 w-56 md:h-72 md:w-72"
+      className="relative mx-auto h-48 w-48 sm:h-56 sm:w-56 md:h-72 md:w-72"
     >
       {/* Decorative ring — moody twilight glow */}
       <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-accent via-accent-light to-highlight opacity-30 blur-xl" />
@@ -50,13 +68,13 @@ function TiltImage() {
       {/* Image container — glassmorphic border */}
       <div className="relative h-full w-full overflow-hidden rounded-full border border-white/10 bg-white/5 shadow-2xl shadow-accent/20 backdrop-blur-xl">
         <Image
-              src="/images/profile.jpg"
-              alt="Parth Khare — AI Engineer & Full-Stack Developer"
-              width={288}
-              height={288}
-              priority
-              className="h-full w-full object-cover object-top"
-            />
+          src="/images/profile.jpg"
+          alt="Parth Khare — AI Engineer & Full-Stack Developer"
+          width={288}
+          height={288}
+          priority
+          className="h-full w-full object-cover object-top"
+        />
       </div>
     </motion.div>
   );
@@ -67,12 +85,14 @@ function TiltImage() {
 /* ------------------------------------------------------------------ */
 
 export default function Hero() {
+  const canHover = useCanHover();
+
   return (
     <section
       id="about"
       className="relative flex h-screen w-full flex-col justify-center overflow-hidden pt-24"
     >
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:px-6 md:grid-cols-2 md:gap-16 md:px-12">
         {/* Text Column */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -81,10 +101,10 @@ export default function Hero() {
           className="order-2 text-center md:order-1 md:text-left"
         >
           <p className="mb-3 font-mono text-sm font-medium uppercase tracking-widest text-accent-light">
-            AI Engineer & Full-Stack Developer
+            AI Engineer & Backend Developer
           </p>
 
-          <h1 className="text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+          <h1 className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl">
             Hi, I&rsquo;m Parth{" "}
             <motion.span
               animate={{ rotate: [0, 14, -8, 14, -4, 10, 0] }}
@@ -99,7 +119,7 @@ export default function Hero() {
             >
               👋
             </motion.span>
-            <span className="mt-1 block text-2xl font-semibold text-accent sm:text-3xl lg:text-4xl">
+            <span className="mt-1 block text-xl font-semibold text-accent sm:text-2xl md:text-3xl lg:text-4xl">
               AI Engineer & Backend Developer
             </span>
           </h1>
@@ -149,7 +169,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
           className="order-1 md:order-2"
         >
-          <TiltImage />
+          <TiltImage canHover={canHover} />
         </motion.div>
       </div>
 

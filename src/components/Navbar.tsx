@@ -55,7 +55,7 @@ export default function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-4 md:px-12">
         {/* Logo */}
         <a
           href="#about"
@@ -92,7 +92,7 @@ export default function Navbar() {
         {/* Mobile Hamburger */}
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-lg p-2 text-foreground/70 transition-colors hover:bg-white/10 md:hidden"
+          className="inline-flex items-center justify-center rounded-lg p-2 min-h-[44px] min-w-[44px] text-foreground/70 transition-colors hover:bg-white/10 md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle navigation"
         >

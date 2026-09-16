@@ -13,6 +13,7 @@ import {
   SiFlask,
   SiStreamlit,
   SiScikitlearn,
+  SiPytorch,
   SiPostgresql,
   SiRedis,
   SiMongodb,
@@ -52,6 +53,7 @@ const SKILLS: SkillEntry[] = [
   { name: "Flask", icon: SiFlask, color: "#F8FAFC", category: "Frameworks" },
   { name: "Streamlit", icon: SiStreamlit, color: "#FF4B4B", category: "Frameworks" },
   { name: "Scikit-learn", icon: SiScikitlearn, color: "#F7931E", category: "Frameworks" },
+  { name: "PyTorch", icon: SiPytorch, color: "#EE4C2C", category: "Frameworks" },
 
   // Databases & DevOps
   { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1", category: "DevOps" },
@@ -102,7 +104,7 @@ export default function Skills() {
         <div className="absolute left-1/2 top-0 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-highlight/20 to-transparent" />
       </div>
 
-      <div className="mx-auto w-full max-w-5xl px-6">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-12">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -160,14 +162,14 @@ export default function Skills() {
                 }}
                 whileTap={{ scale: 0.92 }}
                 whileDrag={{ scale: 1.15, zIndex: 50 }}
-                className="m-2 inline-flex h-24 w-24 cursor-grab flex-col items-center justify-center gap-2
+                className="m-1.5 sm:m-2 inline-flex h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 cursor-grab flex-col items-center justify-center gap-1.5 sm:gap-2
                            rounded-full border border-panel-border bg-background/50
                            shadow-lg backdrop-blur-md
                            transition-colors duration-200
                            active:cursor-grabbing"
               >
-                <Icon size={32} color={color} className="w-8 h-8 shrink-0" />
-                <span className="text-xs font-mono text-muted text-center leading-tight px-1">
+                <Icon size={24} color={color} className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 shrink-0" />
+                <span className="text-[10px] sm:text-xs font-mono text-muted text-center leading-tight px-1">
                   {name}
                 </span>
               </motion.div>

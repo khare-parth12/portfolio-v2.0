@@ -36,9 +36,7 @@ const PROJECTS: Project[] = [
       "Gemini API",
     ],
     images: [
-      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+      "/screenshots/hirelens/homepage.png",
     ],
     liveUrl: "https://ai-resume-analyzer-full-stack.vercel.app/",
   },
@@ -89,9 +87,11 @@ const PROJECTS: Project[] = [
       "Vercel",
     ],
     images: [
-      "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)",
-      "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
-      "linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%)",
+      "/screenshots/shellportfolio/ss1.png",
+      "/screenshots/shellportfolio/ss2.png",
+      "/screenshots/shellportfolio/ss3.png",
+      "/screenshots/shellportfolio/ss4.png",
+      "/screenshots/shellportfolio/ss5.png",
     ],
     liveUrl: "https://portfolio-parth-khare.vercel.app/",
   },
@@ -206,7 +206,7 @@ function ImageCarousel({
                 e.stopPropagation();
                 paginate(-1);
               }}
-              className="absolute left-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-panel-border bg-panel-bg text-muted backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-panel-bg/80"
+              className="absolute left-2 top-1/2 z-20 flex h-11 w-11 md:h-8 md:w-8 -translate-y-1/2 items-center justify-center rounded-full border border-panel-border bg-panel-bg text-muted backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-panel-bg/80"
               aria-label="Previous image"
             >
               <ChevronLeft size={16} />
@@ -217,7 +217,7 @@ function ImageCarousel({
                 e.stopPropagation();
                 paginate(1);
               }}
-              className="absolute right-2 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-panel-border bg-panel-bg text-muted backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-panel-bg/80"
+              className="absolute right-2 top-1/2 z-20 flex h-11 w-11 md:h-8 md:w-8 -translate-y-1/2 items-center justify-center rounded-full border border-panel-border bg-panel-bg text-muted backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-panel-bg/80"
               aria-label="Next image"
             >
               <ChevronRight size={16} />
@@ -406,7 +406,7 @@ export default function ProjectGrid() {
       className="relative flex h-screen w-full flex-col pt-24"
     >
       {/* Section heading */}
-      <div className="mx-auto w-full max-w-5xl px-6">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -431,7 +431,7 @@ export default function ProjectGrid() {
         ref={scrollRef}
         className="mt-10 flex-1 overflow-y-auto pb-12"
       >
-        <div className="mx-auto max-w-5xl px-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-12">
           {PROJECTS.map((project, i) => (
             <DossierPanel
               key={project.title}
