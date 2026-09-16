@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 
@@ -48,10 +49,14 @@ function TiltImage() {
 
       {/* Image container — glassmorphic border */}
       <div className="relative h-full w-full overflow-hidden rounded-full border border-white/10 bg-white/5 shadow-2xl shadow-accent/20 backdrop-blur-xl">
-        {/* Placeholder avatar gradient */}
-        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-accent/20 via-background to-highlight/20">
-          <span className="select-none text-5xl md:text-6xl">👨‍💻</span>
-        </div>
+        <Image
+              src="/images/profile.jpg"
+              alt="Parth Khare — AI Engineer & Full-Stack Developer"
+              width={288}
+              height={288}
+              priority
+              className="h-full w-full object-cover object-top"
+            />
       </div>
     </motion.div>
   );
@@ -65,7 +70,7 @@ export default function Hero() {
   return (
     <section
       id="about"
-      className="relative flex h-screen w-full snap-start flex-col justify-center overflow-hidden pt-24"
+      className="relative flex h-screen w-full flex-col justify-center overflow-hidden pt-24"
     >
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16">
         {/* Text Column */}

@@ -39,7 +39,7 @@
 }
 
 html {
-  /* scroll-behavior is handled by the snap container via Tailwind scroll-smooth */
+  /* scroll-behavior is handled by Framer Motion scroll-linked transitions */
 }
 
 body {

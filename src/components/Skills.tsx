@@ -95,7 +95,7 @@ export default function Skills() {
   return (
     <section
       id="skills"
-      className="relative flex h-screen w-full snap-start flex-col justify-center pt-24"
+      className="relative flex h-screen w-full flex-col justify-center pt-24"
     >
       {/* Subtle top-rule decoration */}
       <div className="absolute inset-0 -z-10">

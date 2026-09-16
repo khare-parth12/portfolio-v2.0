@@ -403,7 +403,7 @@ export default function ProjectGrid() {
   return (
     <section
       id="projects"
-      className="relative flex h-screen w-full snap-start flex-col pt-24"
+      className="relative flex h-screen w-full flex-col pt-24"
     >
       {/* Section heading */}
       <div className="mx-auto w-full max-w-5xl px-6">

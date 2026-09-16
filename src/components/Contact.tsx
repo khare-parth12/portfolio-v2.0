@@ -65,7 +65,7 @@ export default function Contact() {
   return (
     <footer
       id="contact"
-      className="relative flex h-screen w-full snap-start flex-col justify-center border-t border-white/5 pt-24"
+      className="relative flex h-screen w-full flex-col justify-center border-t border-white/5 pt-24"
     >
       {/* Gradient strip at top */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
