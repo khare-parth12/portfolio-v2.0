@@ -45,8 +45,16 @@ const CERTIFICATES: Certificate[] = [
     image: "/certificates/anthropic-claude-101.png",
   },
   {
-    title: "Generative AI Engineering Mastermind",
-    image: "/certificates/generative-ai-engineering.jpg",
+    title: "Data Analyst Bootcamp",
+    image: "/certificates/data-analyst.jpg",
+  },
+  {
+    title: "Data Privacy (GDPR) Fundamentals",
+    image: "/certificates/data-privacy-gdpr.jpg",
+  },
+  {
+    title: "AI for Every Employee",
+    image: "/certificates/ai-literacy.jpg",
   },
   {
     title: "MATLAB Simulink OnRamp",
