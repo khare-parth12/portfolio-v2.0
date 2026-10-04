@@ -37,6 +37,10 @@ const CERTIFICATES: Certificate[] = [
     image: "/certificates/cloud-computing-nptel.png",
   },
   {
+    title: "GenAI for Beginners",
+    image: "/certificates/gen-ai-beginners.jpg",
+  },
+  {
     title: "Intensive AI Agents",
     image: "/certificates/intensive-ai-agents.png",
   },
@@ -81,7 +85,7 @@ function useGlareGradient(
   return useTransform(
     [glareX, glareY] as MotionValue<number>[],
     ([x, y]: number[]) =>
-      `radial-gradient(circle at ${x}% ${y}%, rgba(56,189,248,0.35) 0%, rgba(56,189,248,0.10) 40%, transparent 70%)`
+      `radial-gradient(circle at ${x}% ${y}%, rgba(209,213,219,0.35) 0%, rgba(209,213,219,0.10) 40%, transparent 70%)`
   );
 }
 

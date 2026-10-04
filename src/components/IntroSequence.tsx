@@ -62,7 +62,7 @@ function disintegrateElement(
   /* Get computed styles from the source element */
   const computed = getComputedStyle(sourceEl);
   offCtx.font = computed.font;
-  offCtx.fillStyle = "#F8FAFC"; /* Twilight foreground */
+  offCtx.fillStyle = "#F9FAFB"; /* Oxford Inkwell foreground */
   offCtx.textAlign = "center";
   offCtx.textBaseline = "middle";
   offCtx.fillText(

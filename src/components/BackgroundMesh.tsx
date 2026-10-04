@@ -158,7 +158,7 @@ function MeshController({
   return (
     <mesh ref={meshRef} scale={2.4}>
       <icosahedronGeometry args={[1, 1]} />
-      <meshBasicMaterial color="#38BDF8" wireframe transparent opacity={0.18} />
+      <meshBasicMaterial color="#D1D5DB" wireframe transparent opacity={0.18} />
     </mesh>
   );
 }

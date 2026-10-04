@@ -86,10 +86,10 @@ export default function ShaderBackground() {
         pointerEvents="none"
       >
         <ShaderGradient
-          /* Twilight & Glass palette */
-          color1="#0B0F19"
-          color2="#1E3A5F"
-          color3="#8AA2C0"
+          /* Oxford Inkwell palette */
+          color1="#05050A"
+          color2="#1F2937"
+          color3="#D1D5DB"
           /* Heavy fluid deformation */
           type="waterPlane"
           wireframe={false}

@@ -48,9 +48,9 @@ const SKILLS: SkillEntry[] = [
 
   // Frameworks & Libraries
   { name: "React", icon: SiReact, color: "#61DAFB", category: "Frameworks" },
-  { name: "Next.js", icon: SiNextdotjs, color: "#F8FAFC", category: "Frameworks" },
+  { name: "Next.js", icon: SiNextdotjs, color: "#F9FAFB", category: "Frameworks" },
   { name: "FastAPI", icon: SiFastapi, color: "#009688", category: "Frameworks" },
-  { name: "Flask", icon: SiFlask, color: "#F8FAFC", category: "Frameworks" },
+  { name: "Flask", icon: SiFlask, color: "#F9FAFB", category: "Frameworks" },
   { name: "Streamlit", icon: SiStreamlit, color: "#FF4B4B", category: "Frameworks" },
   { name: "Scikit-learn", icon: SiScikitlearn, color: "#F7931E", category: "Frameworks" },
   { name: "PyTorch", icon: SiPytorch, color: "#EE4C2C", category: "Frameworks" },
@@ -64,8 +64,8 @@ const SKILLS: SkillEntry[] = [
   { name: "Git", icon: SiGit, color: "#F05032", category: "DevOps" },
 
   // Architecture & APIs
-  { name: "REST APIs", icon: Globe as unknown as IconType, color: "#38BDF8", category: "Architecture" },
-  { name: "JWT/RBAC", icon: SiJsonwebtokens, color: "#F8FAFC", category: "Architecture" },
+  { name: "REST APIs", icon: Globe as unknown as IconType, color: "#D1D5DB", category: "Architecture" },
+  { name: "JWT/RBAC", icon: SiJsonwebtokens, color: "#F9FAFB", category: "Architecture" },
   { name: "Webhooks", icon: Webhook as unknown as IconType, color: "#A78BFA", category: "Architecture" },
 ];
 
