@@ -4,8 +4,6 @@ import { useRef, useEffect, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MathUtils } from "three";
 import type { Mesh } from "three";
-import ShaderBackground from "@/components/ShaderBackground";
-
 /* ------------------------------------------------------------------ */
 /*  Scroll-Reactive Mesh + Cinematic Camera Controller                 */
 /*  + Horizontal Drag Rotation                                         */
@@ -174,9 +172,6 @@ export default function BackgroundMesh({
 }) {
   return (
     <>
-      {/* z-[-20]: Deepest layer — fluid shader gradient */}
-      <ShaderBackground />
-
       {/* z-[-10]: Wireframe mesh canvas — sits above the shader gradient */}
       <div className="pointer-events-none fixed inset-0 -z-10 h-screen w-full">
         <Canvas

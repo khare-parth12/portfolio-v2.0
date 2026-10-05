@@ -17,9 +17,9 @@ import { MathUtils } from "three";
 /* ------------------------------------------------------------------ */
 
 /** Baseline animation speed when idle */
-const BASE_SPEED = 0.08;
+const BASE_SPEED = 0.02;
 /** Peak speed multiplier when scrolling hard */
-const MAX_SPEED = 1.6;
+const MAX_SPEED = 0.4;
 /** Damping lambda — higher = snappier deceleration back to baseline */
 const DECAY_LAMBDA = 3;
 
@@ -62,7 +62,7 @@ export default function ShaderBackground() {
     }
 
     /* Map velocity → uSpeed: baseline + velocity-driven boost */
-    const boost = Math.min(s.dampedVelocity * 12, MAX_SPEED - BASE_SPEED);
+    const boost = Math.min(s.dampedVelocity * 4, MAX_SPEED - BASE_SPEED);
     setSpeed(BASE_SPEED + boost);
 
     rafRef.current = requestAnimationFrame(tick);
@@ -86,10 +86,10 @@ export default function ShaderBackground() {
         pointerEvents="none"
       >
         <ShaderGradient
-          /* Oxford Inkwell palette */
+          /* Liquid Silver & Ink palette */
           color1="#05050A"
-          color2="#1F2937"
-          color3="#D1D5DB"
+          color2="#374151"
+          color3="#E5E7EB"
           /* Heavy fluid deformation */
           type="waterPlane"
           wireframe={false}
@@ -108,12 +108,11 @@ export default function ShaderBackground() {
           cDistance={3.5}
           cAzimuthAngle={180}
           cPolarAngle={80}
-          /* Lighting — cranked up so the dark colors catch light */
-          lightType="env"
-          brightness={2.5}
-          envPreset="dawn"
-          /* Visible reflection on fluid peaks */
-          reflection={0.4}
+          /* Lighting — neutral white, no colored env map */
+          lightType="3d"
+          brightness={1.2}
+          /* No reflection — prevents colored env highlights */
+          reflection={0}
           /* Position & rotation (flatten to fill screen) */
           positionX={0}
           positionY={0}

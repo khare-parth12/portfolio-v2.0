@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
+import { Mail, Send } from "lucide-react";
+import { sendMessage } from "@/app/actions/contact";
 
 /* Inline SVG icons for brand logos (not available in lucide-react v1.31+) */
 function LinkedInIcon({ size = 18 }: { size?: number }) {
@@ -51,7 +53,7 @@ const SOCIAL_LINKS = [
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/khareparth12",
+    href: "https://linkedin.com/in/parthkhare12",
     icon: LinkedInIcon,
   },
   {
@@ -62,6 +64,26 @@ const SOCIAL_LINKS = [
 ];
 
 export default function Contact() {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMessage("");
+    
+    const formData = new FormData(e.currentTarget);
+    const result = await sendMessage(formData);
+    
+    if (result.success) {
+      setStatus("success");
+      (e.target as HTMLFormElement).reset();
+    } else {
+      setStatus("error");
+      setErrorMessage(result.error || "Failed to send message.");
+    }
+  };
+
   return (
     <footer
       id="contact"
@@ -70,49 +92,119 @@ export default function Contact() {
       {/* Gradient strip at top */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-12">
-        <div className="flex flex-col items-center text-center">
-          {/* CTA */}
+      <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          {/* Left Column (The Form) */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5 }}
           >
-            <p className="font-mono text-sm font-medium uppercase tracking-widest text-accent-light">
-              Get In Touch
-            </p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Let&rsquo;s Connect
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-base text-muted">
-              Have a project in mind, want to collaborate, or just want to say
-              hi? I&rsquo;d love to hear from you.
-            </p>
+            <div className="bg-panel-bg backdrop-blur-xl border border-panel-border rounded-2xl p-6 sm:p-8">
+              <h3 className="text-2xl font-bold text-foreground mb-6">Message Me</h3>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="name" className="text-sm font-medium text-muted">Your Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="John Doe"
+                    className="bg-background/50 border border-panel-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                  />
+                </div>
+                
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="email" className="text-sm font-medium text-muted">Your Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="john@example.com"
+                    className="bg-background/50 border border-panel-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                  />
+                </div>
+                
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="message" className="text-sm font-medium text-muted">Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={4}
+                    placeholder="How can I help you?"
+                    className="bg-background/50 border border-panel-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none"
+                  />
+                </div>
+                
+                {status === "success" && (
+                  <p className="text-sm text-green-400">Message sent successfully!</p>
+                )}
+                {status === "error" && (
+                  <p className="text-sm text-red-400">{errorMessage}</p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="bg-accent text-background font-medium py-3 rounded-lg hover:opacity-90 transition-opacity mt-2 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {status === "loading" ? "Sending..." : "Send Message"}
+                  <Send size={18} />
+                </button>
+              </form>
+            </div>
           </motion.div>
 
-          {/* Social Icons */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="mt-10 flex items-center gap-4"
-          >
-            {SOCIAL_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="group inline-flex items-center gap-2.5 rounded-full border border-panel-border bg-panel-bg px-5 py-3 text-sm font-medium text-foreground/70 backdrop-blur-xl transition-all duration-300 hover:border-accent/50 hover:bg-panel-bg/80 hover:text-foreground hover:shadow-lg hover:shadow-accent/10 active:scale-95"
-              >
-                <link.icon size={18} />
-                <span className="hidden sm:inline">{link.label}</span>
-              </a>
-            ))}
-          </motion.div>
+          {/* Right Column (Existing Content) */}
+          <div className="flex flex-col items-start lg:items-center lg:text-center">
+            {/* CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="lg:flex lg:flex-col lg:items-center"
+            >
+              <p className="font-mono text-sm font-medium uppercase tracking-widest text-accent-light">
+                Get In Touch
+              </p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                Let&rsquo;s Connect
+              </h2>
+              <p className="mt-3 max-w-md text-base text-muted text-left lg:text-center">
+                Have a project in mind, want to collaborate, or just want to say
+                hi? I&rsquo;d love to hear from you.
+              </p>
+            </motion.div>
+
+            {/* Social Icons */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-8 flex flex-wrap items-center gap-4 lg:justify-center"
+            >
+              {SOCIAL_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="group inline-flex items-center gap-2.5 rounded-full border border-panel-border bg-panel-bg px-5 py-3 text-sm font-medium text-foreground/70 backdrop-blur-xl transition-all duration-300 hover:border-accent/50 hover:bg-panel-bg/80 hover:text-foreground hover:shadow-lg hover:shadow-accent/10 active:scale-95"
+                >
+                  <link.icon size={18} />
+                  <span className="hidden sm:inline">{link.label}</span>
+                </a>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
         {/* Bottom bar */}
